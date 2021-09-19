@@ -1,14 +1,11 @@
 import React from "react";
 import "../assets/App.scss";
+import Layer from "./Layer/Layer";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
+      <Layer />
     </div>
   );
 }

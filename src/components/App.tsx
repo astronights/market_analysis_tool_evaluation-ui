@@ -1,11 +1,14 @@
 import React from "react";
-import "../assets/App.scss";
-import Layer from "./Layer/Layer";
+import "../assets/css/App.scss";
+import { GlobalStateProvider } from "../utils/GlobalStateProvider";
+import Layer from "./Layer";
 
 function App() {
   return (
     <div className="App">
-      <Layer />
+      <GlobalStateProvider>
+        <Layer />
+      </GlobalStateProvider>
     </div>
   );
 }

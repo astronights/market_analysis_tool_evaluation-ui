@@ -39,3 +39,21 @@
     display: none;
   }
 }
+
+.stats-card {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-action {
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.home-card {
+  display: flex;
+}

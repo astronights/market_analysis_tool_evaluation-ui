@@ -1,9 +1,3 @@
-export type coin = {
-  symbol: string;
-  name: string;
-  close: number;
-};
-
 export type ohlcv = {
   _id: string;
   coin: string;
@@ -15,4 +9,5 @@ export type ohlcv = {
   close: number;
   volume: number;
   quoteVolume: number;
+  name?: string;
 };

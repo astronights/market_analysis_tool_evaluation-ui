@@ -6,12 +6,9 @@ import React, {
   SetStateAction,
 } from "react";
 
-import { coin } from "../types/ohlcv";
-
 export interface GlobalStateInterface {
   theme: string;
   user: string;
-  coins: coin[];
 }
 
 const GlobalStateContext = createContext({

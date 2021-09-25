@@ -17,6 +17,7 @@ const latestCoins: ohlcv[] = [];
 const curCoin: ohlcv = {
   _id: "id",
   coin: "btc",
+  name: "Bitcoin",
   openTime: 0,
   closeTime: 0,
   open: 0,
@@ -61,7 +62,7 @@ const Home = () => {
         <CoinTable coins={coins} updateCoin={setCoin} />
       </div>
       <div key="candlestick" className="home-card">
-        <Candlestick coin={coin} width={100} height={100} />
+        <Candlestick coin={coin} width={600} height={350} />
       </div>
     </ResponsiveReactGridLayout>
   );

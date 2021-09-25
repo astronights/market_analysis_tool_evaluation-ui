@@ -13,10 +13,10 @@ import {
   XAxis,
   YAxis,
   MouseCoordinateY,
+  Label,
 } from "react-financial-charts";
 import { scaleTime } from "d3-scale";
 import { format } from "d3-format";
-import { timeFormat } from "d3-time-format";
 
 interface chartOhlcv {
   date: Date;
@@ -74,20 +74,26 @@ const Candlestick = (props: CandlestickProps) => {
   };
   const pricesDisplayFormat = format(".2f");
 
-  const dateTimeFormat = "%B %d, %Y";
-  const timeDisplayFormat = timeFormat(dateTimeFormat);
-
   return (
     <ChartCanvas
       height={props.height}
       ratio={3}
       width={props.width}
-      seriesName={`OHLCV prices - ${props.coin}`}
+      margin={{ bottom: 50, top: 100, left: 50, right: 50 }}
+      padding={0}
+      seriesName={`OHLCV prices - ${props.coin.coin}`}
       data={prices}
       xScale={scaleTime()}
       xAccessor={xAccessor}
       xExtents={xExtents}
     >
+      <Label
+        x={props.width / 2}
+        y={0}
+        fontSize={30}
+        fontWeight={"5"}
+        text={`OHLCV prices - ${props.coin.name}`}
+      />
       <Chart
         id={2}
         height={barChartHeight}
@@ -111,7 +117,7 @@ const Candlestick = (props: CandlestickProps) => {
       </Chart>
       <Chart yExtents={candleChartExtents}>
         <EdgeIndicator itemType="last" yAccessor={yEdgeIndicator} />
-        <XAxis showGridLines ticks={12} tickFormat={timeDisplayFormat} />
+        <XAxis showGridLines ticks={6} showTicks={true} />
         <YAxis showGridLines ticks={4} tickFormat={pricesDisplayFormat} />
 
         <CandlestickSeries />

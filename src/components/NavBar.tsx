@@ -13,9 +13,9 @@ const NavBar = () => {
       <Toolbar>
         <NavLink className="app-name nav-link" to="/home">
           <span className="full-text">
-            MATE: Market Analysis Technical Evaluation
+            CryptoMATE: Market Analysis Technical Evaluation
           </span>
-          <span className="short-text">MATE</span>
+          <span className="short-text">CryptoMATE</span>
         </NavLink>
         <NavLink className="nav-link" activeClassName="active-nav" to="/home">
           Home

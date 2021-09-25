@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Responsive as ResponsiveGridLayout,
   WidthProvider,
@@ -14,7 +14,18 @@ const ResponsiveReactGridLayout = WidthProvider(ResponsiveGridLayout);
 
 const latestCoins: ohlcv[] = [];
 
-const curCoin: string = "btc";
+const curCoin: ohlcv = {
+  _id: "id",
+  coin: "btc",
+  openTime: 0,
+  closeTime: 0,
+  open: 0,
+  high: 0,
+  low: 0,
+  close: 0,
+  volume: 0,
+  quoteVolume: 0,
+};
 
 const Home = () => {
   const [coins, setCoins] = useState(latestCoins);
@@ -30,6 +41,7 @@ const Home = () => {
   };
   return (
     <ResponsiveReactGridLayout
+      onResize={(e) => console.log(e)}
       className="layout"
       layouts={layouts}
       rowHeight={100}
@@ -49,7 +61,7 @@ const Home = () => {
         <CoinTable coins={coins} updateCoin={setCoin} />
       </div>
       <div key="candlestick" className="home-card">
-        <Candlestick coin={coin} />
+        <Candlestick coin={coin} width={100} height={100} />
       </div>
     </ResponsiveReactGridLayout>
   );

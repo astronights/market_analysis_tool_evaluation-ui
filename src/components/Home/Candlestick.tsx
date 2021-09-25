@@ -1,98 +1,124 @@
 import React, { useEffect, useState } from "react";
-import HighchartsReact from "highcharts-react-official";
 import { getPrices } from "../../api/ohlcv";
 import { ohlcv } from "../../types/ohlcv";
-import Highcharts from "highcharts";
+import "../../assets/css/Component.scss";
+import {
+  ChartCanvas,
+  Chart,
+  CandlestickSeries,
+  OHLCTooltip,
+  CrossHairCursor,
+  BarSeries,
+  EdgeIndicator,
+  XAxis,
+  YAxis,
+  MouseCoordinateY,
+} from "react-financial-charts";
+import { scaleTime } from "d3-scale";
+import { format } from "d3-format";
+import { timeFormat } from "d3-time-format";
 
-interface CandlestickProps {
-  coin: string;
+interface chartOhlcv {
+  date: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
 }
 
-const coinPrices: ohlcv[] = [];
+interface CandlestickProps {
+  coin: ohlcv;
+  width: number;
+  height: number;
+}
+
+const coinPrices: chartOhlcv[] = [];
 
 const Candlestick = (props: CandlestickProps) => {
   const [prices, setPrices] = useState(coinPrices);
 
   useEffect(() => {
-    getPrices(props.coin).then((data) => setPrices(data));
+    getPrices(props.coin.coin).then((data: ohlcv[]) => {
+      const transformedPrices: chartOhlcv[] = data
+        .map((singleOhlcv) => ({
+          date: new Date(singleOhlcv.closeTime * 1000),
+          open: singleOhlcv.open,
+          high: singleOhlcv.high,
+          low: singleOhlcv.low,
+          close: singleOhlcv.close,
+          volume: singleOhlcv.volume,
+        }))
+        .sort((p1, p2) => (p1.date < p2.date ? -1 : 1));
+      setPrices(transformedPrices);
+    });
   }, [props.coin]);
-  Highcharts.theme = {};
 
-  const options = {
-    rangeSelector: {
-      selected: 1,
-    },
-    chart: {
-      animation: true,
-      type: "candlestick",
-      //   events: {
-      //     load() {
-      //       //   let series = this.series[0];
-      //       //   let index = -1;
-      //       //   setInterval(function () {
-      //       //     index++;
-      //       //     series.addPoint(prices[index], true, true);
-      //       //   }, 1000);
-      //     },
-      //   },
-    },
-    time: {
-      useUTC: false,
-    },
-    title: {
-      text: `OHLC Data ${props.coin}`,
-    },
-    navigator: {
-      enabled: false,
-    },
-    scrollbar: {
-      enabled: true,
-    },
-    xAxis: {
-      scrollablePlotArea: {
-        maxWidth: 1,
-      },
-      zoomEnabled: true,
-      width: "100%",
-      range: 10000,
-      units: [["hour", [1]]],
-    },
-    yAxis: {
-      title: {
-        text: "PRICE",
-        margin: -20,
-        style: {
-          color: "white",
-          fontWeight: 800,
-          opacity: 0.7,
-        },
-      },
-    },
+  const xAccessor = (d: chartOhlcv) => d?.date;
+  const start = xAccessor(prices[Math.max(0, prices.length - 49)]);
+  const end = xAccessor(prices[prices.length - 1]);
+  const xExtents = [start, end];
 
-    series: [
-      {
-        step: "center",
-        name: "test",
-        data: prices.map((price) => [
-          price.closeTime,
-          price.open,
-          price.high,
-          price.low,
-          price.close,
-        ]),
-        type: "candlestick",
-      },
-    ],
+  const candleChartExtents = (data: ohlcv) => {
+    return [data.high, data.low];
+  };
+  const barChartAccessor = (data: ohlcv) => {
+    return data.volume;
   };
 
-  Highcharts.setOptions(Highcharts.theme);
+  const barChartHeight = props.height / 4;
+  const barChartOrigin = (_: any, h: number) => [0, h - barChartHeight];
+
+  const yEdgeIndicator = (data: ohlcv) => {
+    return data.close;
+  };
+  const pricesDisplayFormat = format(".2f");
+
+  const dateTimeFormat = "%B %d, %Y";
+  const timeDisplayFormat = timeFormat(dateTimeFormat);
 
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      constructorType={"stockChart"}
-      options={options}
-    />
+    <ChartCanvas
+      height={props.height}
+      ratio={3}
+      width={props.width}
+      seriesName={`OHLCV prices - ${props.coin}`}
+      data={prices}
+      xScale={scaleTime()}
+      xAccessor={xAccessor}
+      xExtents={xExtents}
+    >
+      <Chart
+        id={2}
+        height={barChartHeight}
+        origin={barChartOrigin}
+        yExtents={barChartAccessor}
+      >
+        <YAxis
+          axisAt="left"
+          orient="left"
+          ticks={5}
+          tickFormat={format(".2s")}
+        />
+
+        <MouseCoordinateY
+          at="left"
+          orient="left"
+          displayFormat={format(".4s")}
+        />
+
+        <BarSeries yAccessor={barChartAccessor} />
+      </Chart>
+      <Chart yExtents={candleChartExtents}>
+        <EdgeIndicator itemType="last" yAccessor={yEdgeIndicator} />
+        <XAxis showGridLines ticks={12} tickFormat={timeDisplayFormat} />
+        <YAxis showGridLines ticks={4} tickFormat={pricesDisplayFormat} />
+
+        <CandlestickSeries />
+        <OHLCTooltip origin={[8, 16]} />
+      </Chart>
+      <CrossHairCursor />
+    </ChartCanvas>
   );
 };
 

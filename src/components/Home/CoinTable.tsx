@@ -31,7 +31,7 @@ const CoinTable = (props: CoinTableProps) => {
               return (
                 <TableRow
                   key={coin.coin}
-                  onClick={() => props.updateCoin(coin.coin)}
+                  onClick={() => props.updateCoin(coin)}
                 >
                   <TableCell>{coin.name}</TableCell>
                   <TableCell>{coin.coin}</TableCell>

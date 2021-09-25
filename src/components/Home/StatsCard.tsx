@@ -30,7 +30,7 @@ const StatsCard = (props: StatsCardProps) => {
         </Typography>
       </CardContent>
       <CardActions className="card-action">
-        <Button size="small">Refresh</Button>
+        <Button size="small">Update</Button>
       </CardActions>
     </Card>
   );

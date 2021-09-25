@@ -7,7 +7,7 @@ const WelcomeCard = () => {
     <Card>
       <CardContent>
         <Typography sx={{ fontSize: 13 }} color="text.secondary" gutterBottom>
-          Welcome to MATE.
+          Welcome to CryptoMATE.
         </Typography>
         <Typography variant="body2">
           Market Analysis Technical Evaluation.

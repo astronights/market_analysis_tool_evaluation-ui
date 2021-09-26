@@ -15,7 +15,7 @@ interface CoinTableProps {
 
 const CoinTable = (props: CoinTableProps) => {
   return (
-    <TableContainer component={Paper} style={{ maxHeight: 480 }}>
+    <TableContainer component={Paper}>
       <Table aria-label="simple table" stickyHeader>
         <TableHead>
           <TableRow>

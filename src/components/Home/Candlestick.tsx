@@ -9,7 +9,6 @@ import {
   OHLCTooltip,
   CrossHairCursor,
   BarSeries,
-  EdgeIndicator,
   XAxis,
   YAxis,
   MouseCoordinateY,
@@ -68,16 +67,12 @@ const Candlestick = (props: CandlestickProps) => {
 
   const barChartHeight = props.height / 4;
   const barChartOrigin = (_: any, h: number) => [0, h - barChartHeight];
-
-  const yEdgeIndicator = (data: ohlcv) => {
-    return data.close;
-  };
   const pricesDisplayFormat = format(".2f");
 
   return (
     <ChartCanvas
       height={props.height}
-      ratio={3}
+      ratio={1}
       width={props.width}
       margin={{ bottom: 50, top: 100, left: 50, right: 50 }}
       padding={0}
@@ -116,10 +111,13 @@ const Candlestick = (props: CandlestickProps) => {
         <BarSeries yAccessor={barChartAccessor} />
       </Chart>
       <Chart yExtents={candleChartExtents}>
-        <EdgeIndicator itemType="last" yAccessor={yEdgeIndicator} />
         <XAxis showGridLines ticks={6} showTicks={true} />
         <YAxis showGridLines ticks={4} tickFormat={pricesDisplayFormat} />
-
+        <MouseCoordinateY
+          at="right"
+          orient="right"
+          displayFormat={format(".4s")}
+        />
         <CandlestickSeries />
         <OHLCTooltip origin={[8, 16]} />
       </Chart>

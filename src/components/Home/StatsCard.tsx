@@ -13,7 +13,15 @@ interface StatsCardProps {
 
 const StatsCard = (props: StatsCardProps) => {
   return (
-    <Card className="stats-card">
+    <Card
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <CardContent className="card-content">
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Coins

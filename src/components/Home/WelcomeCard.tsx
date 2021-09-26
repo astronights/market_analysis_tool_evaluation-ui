@@ -4,13 +4,21 @@ import { CardContent, Typography } from "@mui/material";
 
 const WelcomeCard = () => {
   return (
-    <Card>
+    <Card
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <CardContent>
         <Typography sx={{ fontSize: 13 }} color="text.secondary" gutterBottom>
           Welcome to CryptoMATE.
         </Typography>
         <Typography variant="body2">
-          Market Analysis Technical Evaluation.
+          A simple web-app for Cryptocurrency Technical Analysis.
         </Typography>
       </CardContent>
     </Card>

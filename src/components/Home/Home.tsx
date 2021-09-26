@@ -32,6 +32,16 @@ const Home = () => {
   const [coins, setCoins] = useState(latestCoins);
   const [coin, setCoin] = useState(curCoin);
 
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  console.log(
+    canvasRef,
+    "clientWidth",
+    canvasRef.current?.clientWidth,
+    "offsetWidth",
+    canvasRef.current?.offsetWidth
+  );
+
   useEffect(() => {
     getCoins().then((data) => setCoins(data));
   }, []);
@@ -42,7 +52,8 @@ const Home = () => {
   };
   return (
     <ResponsiveReactGridLayout
-      onResize={(e) => console.log(e)}
+      onResize={(e) => console.log("resized", e)}
+      onLayoutChange={(c, a) => console.log("layout", "current", c, "all", a)}
       className="layout"
       layouts={layouts}
       rowHeight={100}
@@ -62,7 +73,15 @@ const Home = () => {
         <CoinTable coins={coins} updateCoin={setCoin} />
       </div>
       <div key="candlestick" className="home-card">
-        <Candlestick coin={coin} width={600} height={350} />
+        <div ref={canvasRef} style={{ width: "100%", height: "100%" }}>
+          {canvasRef.current ? (
+            <Candlestick
+              coin={coin}
+              width={canvasRef.current.clientWidth}
+              height={canvasRef.current.offsetHeight}
+            />
+          ) : null}
+        </div>
       </div>
     </ResponsiveReactGridLayout>
   );

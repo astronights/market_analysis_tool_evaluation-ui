@@ -73,7 +73,7 @@ const Home = () => {
         <CoinTable coins={coins} updateCoin={setCoin} />
       </div>
       <div key="candlestick" className="home-card">
-        <div ref={canvasRef} style={{ width: "100%", height: "100%" }}>
+        <div ref={canvasRef} className="chart-wrapper">
           {canvasRef.current ? (
             <Candlestick
               coin={coin}

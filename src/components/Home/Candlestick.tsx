@@ -71,10 +71,11 @@ const Candlestick = (props: CandlestickProps) => {
 
   return (
     <ChartCanvas
+      disableZoom={true}
       height={props.height}
       ratio={1}
       width={props.width}
-      margin={{ bottom: 50, top: 100, left: 50, right: 50 }}
+      margin={{ bottom: 20, top: 20, left: 50, right: 50 }}
       padding={0}
       seriesName={`OHLCV prices - ${props.coin.coin}`}
       data={prices}
@@ -83,10 +84,10 @@ const Candlestick = (props: CandlestickProps) => {
       xExtents={xExtents}
     >
       <Label
-        x={props.width / 2}
+        x={props.width / 2.5}
         y={0}
         fontSize={30}
-        fontWeight={"5"}
+        fontWeight={"1"}
         text={`OHLCV prices - ${props.coin.name}`}
       />
       <Chart

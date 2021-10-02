@@ -5,13 +5,25 @@ import CountUp from "react-countup";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import { CardContent, Typography } from "@mui/material";
+import { updatePrices } from "../../api/ohlcv";
+import { getTimeStamp } from "../../utils/DateUtils";
 
 interface StatsCardProps {
   coinCount: number;
   lastUpdated: number;
+  alert: any;
 }
 
 const StatsCard = (props: StatsCardProps) => {
+  const fetchLatestPrices = () => {
+    updatePrices(props.lastUpdated, getTimeStamp(new Date()))
+      .then((_prices) => {
+        return props.alert.success("Coin prices updated!");
+      })
+      .catch((_error) => {
+        return props.alert.error("Could not update prices. Try manually.");
+      });
+  };
   return (
     <Card
       style={{
@@ -38,7 +50,9 @@ const StatsCard = (props: StatsCardProps) => {
         </Typography>
       </CardContent>
       <CardActions className="card-action">
-        <Button size="small">Update</Button>
+        <Button size="small" onClick={fetchLatestPrices}>
+          Update
+        </Button>
       </CardActions>
     </Card>
   );

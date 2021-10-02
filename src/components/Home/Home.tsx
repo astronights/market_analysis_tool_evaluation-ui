@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Responsive as ResponsiveGridLayout,
   WidthProvider,
@@ -10,6 +16,8 @@ import { getCoins } from "../../api/ohlcv";
 import { ohlcv } from "../../types/ohlcv";
 import StatsCard from "./StatsCard";
 import Candlestick from "./Candlestick";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const ResponsiveReactGridLayout = WidthProvider(ResponsiveGridLayout);
 
 const latestCoins: ohlcv[] = [];
@@ -51,39 +59,51 @@ const Home = () => {
       .closeTime;
   };
   return (
-    <ResponsiveReactGridLayout
-      onResize={(e) => console.log("resized", e)}
-      onLayoutChange={(c, a) => console.log("layout", "current", c, "all", a)}
-      className="layout"
-      layouts={layouts}
-      rowHeight={100}
-      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-    >
-      <div key="welcome">
-        <WelcomeCard />
-      </div>
-      <div key="stats">
-        <StatsCard
-          coinCount={coins.length}
-          lastUpdated={coins.length > 0 ? getLastUpdated(coins) : 0}
-        />
-      </div>
-      <div key="coins" className="home-card">
-        <CoinTable coins={coins} updateCoin={setCoin} />
-      </div>
-      <div key="candlestick" className="home-card">
-        <div ref={canvasRef} className="chart-wrapper">
-          {canvasRef.current ? (
-            <Candlestick
-              coin={coin}
-              width={canvasRef.current.clientWidth}
-              height={canvasRef.current.offsetHeight}
-            />
-          ) : null}
+    <React.Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
+      <ResponsiveReactGridLayout
+        onResize={(e) => console.log("resized", e)}
+        onLayoutChange={(c, a) => console.log("layout", "current", c, "all", a)}
+        className="layout"
+        layouts={layouts}
+        rowHeight={100}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+      >
+        <div key="welcome">
+          <WelcomeCard />
         </div>
-      </div>
-    </ResponsiveReactGridLayout>
+        <div key="stats">
+          <StatsCard
+            coinCount={coins.length}
+            lastUpdated={coins.length > 0 ? getLastUpdated(coins) : 0}
+            alert={toast}
+          />
+        </div>
+        <div key="coins" className="home-card">
+          <CoinTable coins={coins} updateCoin={setCoin} />
+        </div>
+        <div key="candlestick" className="home-card">
+          <div ref={canvasRef} className="chart-wrapper">
+            {canvasRef.current ? (
+              <Candlestick
+                coin={coin}
+                width={canvasRef.current.clientWidth}
+                height={canvasRef.current.offsetHeight}
+              />
+            ) : null}
+          </div>
+        </div>
+      </ResponsiveReactGridLayout>
+    </React.Fragment>
   );
 };
 

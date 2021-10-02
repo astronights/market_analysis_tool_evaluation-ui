@@ -13,6 +13,10 @@ import {
   YAxis,
   MouseCoordinateY,
   Label,
+  ema,
+  LineSeries,
+  CurrentCoordinate,
+  MovingAverageTooltip,
 } from "react-financial-charts";
 import { scaleTime } from "d3-scale";
 import { format } from "d3-format";
@@ -24,6 +28,8 @@ interface chartOhlcv {
   low: number;
   close: number;
   volume: number;
+  ema20?: number;
+  ema50?: number;
 }
 
 interface CandlestickProps {
@@ -49,9 +55,25 @@ const Candlestick = (props: CandlestickProps) => {
           volume: singleOhlcv.volume,
         }))
         .sort((p1, p2) => (p1.date < p2.date ? -1 : 1));
-      setPrices(transformedPrices);
+      setPrices(ema50(ema20(transformedPrices)));
     });
   }, [props.coin]);
+
+  const ema20 = ema()
+    .id(0)
+    .options({ windowSize: 20 })
+    .merge((d: chartOhlcv, c: number) => {
+      d.ema20 = c;
+    })
+    .accessor((d: chartOhlcv) => d.ema20);
+
+  const ema50 = ema()
+    .id(1)
+    .options({ windowSize: 50 })
+    .merge((d: chartOhlcv, c: number) => {
+      d.ema50 = c;
+    })
+    .accessor((d: chartOhlcv) => d.ema50);
 
   const xAccessor = (d: chartOhlcv) => d?.date;
   const start = xAccessor(prices[Math.max(0, prices.length - 49)]);
@@ -111,7 +133,9 @@ const Candlestick = (props: CandlestickProps) => {
 
         <BarSeries yAccessor={barChartAccessor} />
       </Chart>
-      <Chart yExtents={candleChartExtents}>
+      <Chart
+        yExtents={[candleChartExtents, ema20.accessor(), ema50.accessor()]}
+      >
         <XAxis showGridLines ticks={6} showTicks={true} />
         <YAxis showGridLines ticks={4} tickFormat={pricesDisplayFormat} />
         <MouseCoordinateY
@@ -120,7 +144,36 @@ const Candlestick = (props: CandlestickProps) => {
           displayFormat={format(".4s")}
         />
         <CandlestickSeries />
+        <LineSeries yAccessor={ema20.accessor()} strokeStyle={ema20.stroke()} />
+        <LineSeries yAccessor={ema50.accessor()} strokeStyle={ema50.stroke()} />
+        <CurrentCoordinate
+          yAccessor={ema20.accessor()}
+          fillStyle={ema20.stroke()}
+        />
+        <CurrentCoordinate
+          yAccessor={ema50.accessor()}
+          fillStyle={ema50.stroke()}
+        />
+
         <OHLCTooltip origin={[8, 16]} />
+        <MovingAverageTooltip
+          onClick={(e) => console.log(e)}
+          origin={[8, 32]}
+          options={[
+            {
+              yAccessor: ema20.accessor(),
+              type: "EMA",
+              stroke: ema20.stroke(),
+              windowSize: ema20.options().windowSize,
+            },
+            {
+              yAccessor: ema50.accessor(),
+              type: "EMA",
+              stroke: ema50.stroke(),
+              windowSize: ema50.options().windowSize,
+            },
+          ]}
+        />
       </Chart>
       <CrossHairCursor />
     </ChartCanvas>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getPrices } from "../../api/ohlcv";
 import { ohlcv } from "../../types/ohlcv";
 import "../../assets/css/Component.scss";
@@ -134,6 +134,7 @@ const Candlestick = (props: CandlestickProps) => {
         <BarSeries yAccessor={barChartAccessor} />
       </Chart>
       <Chart
+        id={1}
         yExtents={[candleChartExtents, ema20.accessor(), ema50.accessor()]}
       >
         <XAxis showGridLines ticks={6} showTicks={true} />

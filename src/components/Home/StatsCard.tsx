@@ -1,4 +1,3 @@
-import React from "react";
 import "../../assets/css/Component.scss";
 import Card from "@mui/material/Card";
 import CountUp from "react-countup";

@@ -1,8 +1,7 @@
 import axios, { Method, AxiosResponse } from "axios";
-const { REACT_APP_SERVER_URL } = process.env;
 
 const api = axios.create({
-  baseURL: REACT_APP_SERVER_URL,
+  baseURL: import.meta.env.VITE_APP_SERVER_URL,
 });
 
 export const request = <T>(

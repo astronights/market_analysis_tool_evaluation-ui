@@ -1,4 +1,3 @@
-import React from "react";
 import "../assets/css/App.scss";
 import { GlobalStateProvider } from "../utils/GlobalStateProvider";
 import Layer from "./Layer";

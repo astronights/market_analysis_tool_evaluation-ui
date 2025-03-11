@@ -1,20 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./assets/css/index.sass";
 import "../node_modules/react-grid-layout/css/styles.css";
 import "../node_modules/react-resizable/css/styles.css";
 import App from "./components/App";
-import reportWebVitals from "./reportWebVitals";
 
-ReactDOM.render(
+const container: HTMLElement = document.getElementById("root")!;
+const root = createRoot(container);
+root.render(
   <BrowserRouter>
     <App />
-  </BrowserRouter>,
-  document.getElementById("root")
+  </BrowserRouter>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
